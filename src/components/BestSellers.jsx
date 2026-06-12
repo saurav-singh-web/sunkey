@@ -39,6 +39,18 @@ const products = [
     img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80',
     color: '#ffeab2',
   },
+   {
+    id: 4,
+    name: 'Hydro Mineral Sunscreen SPF 50+',
+    tag: 'Best Seller',
+    price: '₹649',
+    originalPrice: '₹849',
+    rating: 4.9,
+    reviews: 1240,
+    badge: 'SPF 50+',
+    img: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500&q=80',
+    color: '#b2ecf7',
+  },
 
 ]
 
