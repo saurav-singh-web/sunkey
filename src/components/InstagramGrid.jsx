@@ -7,7 +7,7 @@ const posts = [
   { id: 3, img: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80', likes: '3.1K' },
   { id: 4, img: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&q=80', likes: '1.2K' },
   { id: 5, img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80', likes: '2.7K' },
-  { id: 6, img: 'https://images.unsplash.com/photo-1631390188697-e37cdf8a68f5?w=400&q=80', likes: '980' },
+  { id: 6, img: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80', likes: '2.4K' },
 ]
 
 export default function InstagramGrid() {
