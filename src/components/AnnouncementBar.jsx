@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import './AnnouncementBar.css'
 
 const announcements = [
-  'Buy Lip Oil & Get Hydro Moisturiser SPF 30 FREE — Add both to cart.',
-  'Free Shipping on orders above ₹900 — Shop Now!',
-  'New Launch: Jeju Mineral SPF 50+ — No White Cast, No Residue.',
+  '✦ Buy Lip Oil & Get Hydro Moisturiser SPF 30 FREE — Shop Now',
+  '✦ Free Shipping on orders above ₹900 — Automatic at checkout',
+  '✦ New Launch: Jeju Mineral SPF 50+ — No White Cast, Safe for all skin tones',
 ]
 
 export default function AnnouncementBar() {
@@ -13,6 +13,12 @@ export default function AnnouncementBar() {
 
   const prev = () => setIndex((i) => (i - 1 + announcements.length) % announcements.length)
   const next = () => setIndex((i) => (i + 1) % announcements.length)
+
+  // Auto-slide every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(next, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <div className="announcement">
@@ -25,10 +31,10 @@ export default function AnnouncementBar() {
           <motion.p
             key={index}
             className="announcement__text"
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
           >
             {announcements[index]}
           </motion.p>

@@ -9,29 +9,29 @@ const reviews = [
     location: 'Mumbai',
     rating: 5,
     avatar: 'PS',
-    text: 'I have tried countless sunscreens and Sunkey is genuinely the only one that doesn\'t give me white cast or make me look like a ghost. The texture is SO light — my skin just drinks it up!',
+    text: "I have tried countless physical sunscreens and Sunkey is genuinely the only one that doesn't leave a white cast or clog my pores. The water-gel texture is so lightweight — my skin just drinks it up!",
     product: 'Hydro Mineral Sunscreen SPF 50+',
-    color: '#b2ecf7',
+    color: '#F5D3C5',
   },
   {
     id: 2,
-    name: 'Riya Menon',
+    name: 'Rohan Menon',
     location: 'Bangalore',
     rating: 5,
     avatar: 'RM',
-    text: 'Game changer for my oily skin. I\'ve been using it for 3 months and my skin has never looked better. It controls oil, protects from sun AND smells amazing. 10/10 would recommend.',
+    text: "Absolute game changer for my oily, sensitive skin. I've been using it daily for 3 months now. It controls grease, protects against intense sun, and has a very clean finish. 10/10.",
     product: 'Jeju Mineral Glow Sunscreen',
-    color: '#d4f7b2',
+    color: '#E6EFEA',
   },
   {
     id: 3,
-    name: 'Ananya Reddy',
+    name: 'Dr. Ananya Reddy',
     location: 'Hyderabad',
     rating: 5,
     avatar: 'AR',
-    text: 'As a dermatologist I\'m very picky about recommending products. Sunkey checks every box — mineral-based, non-comedogenic, reef-safe, and it actually works. My patients love it.',
+    text: "As a clinical dermatologist, I am highly critical of skincare claims. Sunkey checks all the boxes: mineral filters, non-comedogenic, reef-safe, and zero sensitization. My patients love it.",
     product: 'Hydro Mineral Sunscreen SPF 50+',
-    color: '#ffeab2',
+    color: '#FBE6B8',
   },
   {
     id: 4,
@@ -39,9 +39,9 @@ const reviews = [
     location: 'Kochi',
     rating: 5,
     avatar: 'KN',
-    text: 'The Lip SPF Oil is everything! My lips are so hydrated and protected. I use it before going to the beach and it\'s the only thing that\'s kept my lips from getting burnt. A must-have!',
+    text: "The Tomato Lip SPF Oil is everything! My lips feel instantly plumped, glassy, and completely shielded from sun cracks. I take it everywhere. A summer handbag essential!",
     product: 'Tomato Extract Lip SPF Oil',
-    color: '#f7c5b2',
+    color: '#FAF0E6',
   },
 ]
 
@@ -53,58 +53,96 @@ export default function Testimonials() {
   const prev = () => setActive((i) => (i - 1 + reviews.length) % reviews.length)
   const next = () => setActive((i) => (i + 1) % reviews.length)
 
+  // Drag handler to cycle cards on swipe
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 60
+    if (info.offset.x < -swipeThreshold) {
+      next()
+    } else if (info.offset.x > swipeThreshold) {
+      prev()
+    }
+  }
+
   return (
     <section className="testimonials" id="reviews">
-      {/* Header */}
-      <div ref={titleRef} className="testimonials__header">
-        <motion.p
-          className="section-tag"
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          Customer Love
-        </motion.p>
-        <motion.h2
-          className="testimonials__title"
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Real Skin, Real Results
-        </motion.h2>
+      {/* Header & Rating Viz */}
+      <div className="testimonials__header-container">
+        <div ref={titleRef} className="testimonials__header">
+          <motion.p
+            className="section-tag"
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            Customer Love
+          </motion.p>
+          <motion.h2
+            className="testimonials__title heading-serif"
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            Real Skin, Real Results
+          </motion.h2>
+        </div>
 
-        {/* Aggregate rating */}
+        {/* E-Commerce Review Panel */}
         <motion.div
-          className="testimonials__aggregate"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.25 }}
+          className="testimonials__rating-panel"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <span className="testimonials__big-star">★★★★★</span>
-          <span className="testimonials__agg-score">4.9 / 5</span>
-          <span className="testimonials__agg-count">from 3,100+ reviews</span>
+          {/* Big Score Card */}
+          <div className="rating-panel__score-card">
+            <h3 className="rating-panel__big-num">4.9</h3>
+            <div className="rating-panel__stars">★★★★★</div>
+            <p className="rating-panel__reviews-count">based on 3,120 reviews</p>
+          </div>
+
+          {/* Progress Bars */}
+          <div className="rating-panel__bars">
+            {[
+              { stars: 5, pct: 95 },
+              { stars: 4, pct: 4 },
+              { stars: 3, pct: 1 },
+              { stars: 2, pct: 0 },
+              { stars: 1, pct: 0 },
+            ].map((row) => (
+              <div key={row.stars} className="rating-bar-row">
+                <span className="rating-bar-label">{row.stars} ★</span>
+                <div className="rating-bar-bg">
+                  <div className="rating-bar-fill" style={{ width: `${row.pct}%` }} />
+                </div>
+                <span className="rating-bar-pct">{row.pct}%</span>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
 
-      {/* Carousel */}
-      <div className="testimonials__carousel">
-        {/* Nav dots left */}
-        <button className="testimonials__nav-btn" onClick={prev} aria-label="Previous review">‹</button>
-
-        <div className="testimonials__track">
+      {/* Draggable Deck Carousel */}
+      <div className="testimonials__carousel-wrap">
+        <div 
+          className="testimonials__track"
+          data-cursor="drag"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
               className="testimonials__card"
               style={{ '--review-color': reviews[active].color }}
-              initial={{ opacity: 0, x: 60, scale: 0.96 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -60, scale: 0.96 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              onDragEnd={handleDragEnd}
+              initial={{ opacity: 0, x: 120, rotate: 6, scale: 0.96 }}
+              animate={{ opacity: 1, x: 0, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -120, rotate: -6, scale: 0.96 }}
+              transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+              whileDrag={{ scale: 0.98, cursor: 'grabbing' }}
             >
-              {/* Quote mark */}
-              <span className="testimonials__quote">"</span>
+              {/* Quote Mark Decoration */}
+              <span className="testimonials__quote">“</span>
 
               {/* Stars */}
               <div className="testimonials__stars">
@@ -112,12 +150,15 @@ export default function Testimonials() {
               </div>
 
               {/* Text */}
-              <p className="testimonials__text">{reviews[active].text}</p>
+              <p className="testimonials__text">"{reviews[active].text}"</p>
 
-              {/* Product */}
-              <p className="testimonials__product">Verified purchase · {reviews[active].product}</p>
+              {/* Product Badge */}
+              <div className="testimonials__badge-row">
+                <span className="testimonials__purchase-badge">Verified purchase</span>
+                <span className="testimonials__product">{reviews[active].product}</span>
+              </div>
 
-              {/* Author */}
+              {/* Author Row */}
               <div className="testimonials__author">
                 <div className="testimonials__avatar" style={{ background: reviews[active].color }}>
                   {reviews[active].avatar}
@@ -131,33 +172,26 @@ export default function Testimonials() {
           </AnimatePresence>
         </div>
 
-        <button className="testimonials__nav-btn" onClick={next} aria-label="Next review">›</button>
+        {/* Carousel Navigation Buttons */}
+        <button className="testimonials__nav-btn testimonials__nav-btn--prev" onClick={prev} aria-label="Previous review">
+          ‹
+        </button>
+        <button className="testimonials__nav-btn testimonials__nav-btn--next" onClick={next} aria-label="Next review">
+          ›
+        </button>
       </div>
 
-      {/* Dots */}
+      {/* Dots Indicator */}
       <div className="testimonials__dots">
         {reviews.map((_, i) => (
           <motion.button
             key={i}
             className={`testimonials__dot ${i === active ? 'active' : ''}`}
             onClick={() => setActive(i)}
-            whileHover={{ scale: 1.3 }}
+            whileHover={{ scale: 1.25 }}
             whileTap={{ scale: 0.9 }}
             aria-label={`Review ${i + 1}`}
           />
-        ))}
-      </div>
-
-      {/* Background cards */}
-      <div className="testimonials__bg-cards">
-        {reviews.map((r, i) => (
-          i !== active && (
-            <div
-              key={r.id}
-              className="testimonials__bg-card"
-              style={{ '--review-color': r.color, '--i': i }}
-            />
-          )
         ))}
       </div>
     </section>

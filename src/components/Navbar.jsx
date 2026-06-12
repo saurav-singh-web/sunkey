@@ -3,20 +3,25 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { gsap } from 'gsap'
 import './Navbar.css'
 
-const navLinks = ['Home', 'Shop', 'About', 'FAQ', 'Contact']
+const navLinks = [
+  { name: 'Home', href: '#' },
+  { name: 'Shop', href: '#shop' },
+  { name: 'About', href: '#about' },
+  { name: 'Ingredients', href: '#ingredients' },
+  { name: 'Reviews', href: '#reviews' },
+]
 
-export default function Navbar() {
+export default function Navbar({ cartCount, onCartClick }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [cartCount] = useState(2)
   const navRef = useRef(null)
 
   useEffect(() => {
-    // Animate nav in on load
+    // Elegant slide-in reveal
     gsap.fromTo(
       navRef.current,
-      { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.1 }
+      { y: -100, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out', delay: 0.2 }
     )
 
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -29,53 +34,53 @@ export default function Navbar() {
       ref={navRef}
       className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}
     >
-      {/* Logo */}
+      {/* Brand Logo */}
       <motion.a
         href="#"
         className="navbar__logo"
-        whileHover={{ scale: 1.04 }}
-        transition={{ type: 'spring', stiffness: 300 }}
+        whileHover={{ scale: 1.03 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
       >
         Sunkey<sup>™</sup>
       </motion.a>
 
-      {/* Desktop Links */}
+      {/* Desktop Navigation Links */}
       <ul className="navbar__links">
         {navLinks.map((link, i) => (
           <motion.li
-            key={link}
-            initial={{ opacity: 0, y: -10 }}
+            key={link.name}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 + i * 0.08, duration: 0.5 }}
+            transition={{ delay: 0.3 + i * 0.08, duration: 0.6, ease: 'easeOut' }}
           >
-            <a href="#" className="navbar__link">
-              {link}
+            <a href={link.href} className="navbar__link">
+              {link.name}
               <span className="navbar__link-underline" />
             </a>
           </motion.li>
         ))}
       </ul>
 
-      {/* Icons */}
+      {/* Navigation Icons / Actions */}
       <div className="navbar__icons">
-        <motion.button
-          className="navbar__icon-btn"
-          aria-label="Search"
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </motion.button>
-
+        {/* Cart Trigger Button */}
         <motion.button
           className="navbar__icon-btn navbar__cart"
           aria-label="Cart"
-          whileHover={{ scale: 1.15 }}
-          whileTap={{ scale: 0.9 }}
+          onClick={onCartClick}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
             <line x1="3" y1="6" x2="21" y2="6" />
             <path d="M16 10a4 4 0 01-8 0" />
@@ -85,19 +90,20 @@ export default function Navbar() {
               className="navbar__cart-badge"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 400 }}
+              key={cartCount} // Re-renders badge so the bounce fires on cart updates
+              transition={{ type: 'spring', stiffness: 500, damping: 15 }}
             >
               {cartCount}
             </motion.span>
           )}
         </motion.button>
 
-        {/* Hamburger for mobile */}
+        {/* Mobile Menu Hamburger */}
         <motion.button
           className="navbar__hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menu"
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.92 }}
         >
           <span className={`hamburger-bar ${menuOpen ? 'open' : ''}`} />
           <span className={`hamburger-bar ${menuOpen ? 'open' : ''}`} />
@@ -105,7 +111,7 @@ export default function Navbar() {
         </motion.button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Sidebar Dropdown */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -113,19 +119,19 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
           >
             {navLinks.map((link, i) => (
               <motion.a
-                key={link}
-                href="#"
+                key={link.name}
+                href={link.href}
                 className="navbar__mobile-link"
-                initial={{ x: -20, opacity: 0 }}
+                initial={{ x: -16, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: i * 0.06 }}
+                transition={{ delay: i * 0.05, ease: 'easeOut' }}
                 onClick={() => setMenuOpen(false)}
               >
-                {link}
+                {link.name}
               </motion.a>
             ))}
           </motion.div>

@@ -1,24 +1,32 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Hero.css'
 
-/* ─────────────────────────────────────────────
-   Inline SVG sun decoration
-───────────────────────────────────────────── */
-function SunDeco({ className }) {
+gsap.registerPlugin(ScrollTrigger)
+
+/* ── Minimalist Premium SVG Sun illustration ── */
+function PremiumSun({ className, svgRef }) {
   return (
-    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="22" fill="currentColor" opacity="0.9" />
-      {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg) => (
-        <line
-          key={deg}
-          x1="50" y1="50"
-          x2={50 + 40 * Math.cos((deg * Math.PI) / 180)}
-          y2={50 + 40 * Math.sin((deg * Math.PI) / 180)}
-          stroke="currentColor" strokeWidth="3" strokeLinecap="round" opacity="0.6"
-        />
-      ))}
+    <svg ref={svgRef} className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="50" cy="50" r="22" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 3" />
+      {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => {
+        const rad = (deg * Math.PI) / 180
+        const x1 = 50 + 26 * Math.cos(rad)
+        const y1 = 50 + 26 * Math.sin(rad)
+        const x2 = 50 + 38 * Math.cos(rad)
+        const y2 = 50 + 38 * Math.sin(rad)
+        return (
+          <line
+            key={deg}
+            x1={x1} y1={y1}
+            x2={x2} y2={y2}
+            stroke="currentColor" strokeWidth="1" strokeLinecap="round"
+          />
+        )
+      })}
     </svg>
   )
 }
@@ -28,81 +36,148 @@ export default function Hero() {
   const leftRef = useRef(null)
   const centerRef = useRef(null)
   const rightRef = useRef(null)
+  const productImgWrapRef = useRef(null)
   const productImgRef = useRef(null)
   const sunRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Panel reveal timeline
-      const tl = gsap.timeline({ delay: 0.6 })
-
+      // 1. Panel entrance animation
+      const tl = gsap.timeline({ delay: 0.4 })
+      
       tl.fromTo(leftRef.current,
-        { x: -60, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out' }
       )
       .fromTo(centerRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
-        '-=0.6'
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out' },
+        '-=0.9'
       )
       .fromTo(rightRef.current,
-        { x: 60, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
-        '-=0.6'
+        { y: 70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out' },
+        '-=0.9'
       )
 
-      // Spinning sun
+      // 2. Slow continuous rotation for luxury sun
       gsap.to(sunRef.current, {
         rotation: 360,
-        duration: 18,
+        duration: 25,
         repeat: -1,
         ease: 'none',
-        transformOrigin: 'center center',
       })
 
-      // Floating product image
+      // 3. Float loop for product image
       gsap.to(productImgRef.current, {
-        y: -12,
-        duration: 2.8,
+        y: -10,
+        duration: 3,
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
       })
+
+      // 4. Scroll Triggered Parallax for Left & Right panels
+      gsap.to(leftRef.current, {
+        y: 60,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        }
+      })
+
+      gsap.to(rightRef.current, {
+        y: -60,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        }
+      })
     }, heroRef)
 
-    return () => ctx.revert()
+    // 5. Magnetic hover physics on product image wrap
+    const handleMouseMove = (e) => {
+      const wrap = productImgWrapRef.current
+      if (!wrap) return
+      
+      const rect = wrap.getBoundingClientRect()
+      const x = e.clientX - rect.left - rect.width / 2
+      const y = e.clientY - rect.top - rect.height / 2
+
+      gsap.to(productImgRef.current, {
+        x: x * 0.18,
+        y: y * 0.18,
+        duration: 0.6,
+        ease: 'power3.out',
+        overwrite: 'auto'
+      })
+    }
+
+    const handleMouseLeave = () => {
+      gsap.to(productImgRef.current, {
+        x: 0,
+        y: 0,
+        duration: 0.8,
+        ease: 'elastic.out(1, 0.4)',
+        overwrite: 'auto'
+      })
+    }
+
+    const wrapEl = productImgWrapRef.current
+    if (wrapEl) {
+      wrapEl.addEventListener('mousemove', handleMouseMove)
+      wrapEl.addEventListener('mouseleave', handleMouseLeave)
+    }
+
+    return () => {
+      ctx.revert()
+      if (wrapEl) {
+        wrapEl.removeEventListener('mousemove', handleMouseMove)
+        wrapEl.removeEventListener('mouseleave', handleMouseLeave)
+      }
+    }
   }, [])
+
+  // Words list for staggered reveal
+  const titleText = "Discover The Magic Of Our Mineral SPF!"
+  const titleWords = titleText.split(' ')
 
   return (
     <section ref={heroRef} className="hero">
       {/* ── LEFT PANEL ── */}
       <div ref={leftRef} className="hero__panel hero__panel--left">
-        <SunDeco ref={sunRef} className="hero__sun" />
+        <PremiumSun svgRef={sunRef} className="hero__sun" />
 
         <div className="hero__left-text">
-          <p className="hero__promo-tag">Limited Time Offer</p>
+          <p className="hero__promo-tag">LIMITED LAUNCH OFFER</p>
           <h2 className="hero__promo-heading">
-            PROTECT YOUR SKIN!<br />
-            <strong>SAVE BIG THIS SEASON!</strong><br />
-            DON'T MISS THIS HOT DEAL!
+            Skin Protection<br />
+            <strong>That Glows</strong><br />
+            with nature's best
           </h2>
           <motion.a
-            href="#"
+            href="#shop"
             className="hero__promo-btn"
-            whileHover={{ scale: 1.05, backgroundColor: '#1c1c1c', color: '#fff' }}
+            whileHover={{ scale: 1.04, letterSpacing: '0.2em' }}
             whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.2 }}
           >
-            Shop Sale →
+            Explore Sale →
           </motion.a>
         </div>
 
-        {/* Circular product hero image */}
-        <div className="hero__circle-wrap">
+        {/* Circular product hero image container with magnetic hover */}
+        <div ref={productImgWrapRef} className="hero__circle-wrap" data-cursor="view">
+          <div className="hero__circle-glow" />
           <div className="hero__circle">
             <img
               ref={productImgRef}
-              src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80"
+              src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500&q=80"
               alt="SPF 50 Mineral Sunscreen"
               className="hero__circle-img"
             />
@@ -112,8 +187,8 @@ export default function Hero() {
         {/* SPF badge */}
         <motion.div
           className="hero__spf-badge"
-          animate={{ rotate: [0, 5, -5, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ rotate: [0, 6, -6, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         >
           <span className="hero__spf-num">SPF</span>
           <span className="hero__spf-val">50+</span>
@@ -127,50 +202,64 @@ export default function Hero() {
             className="section-tag hero__center-tag"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
+            transition={{ delay: 1, duration: 0.6 }}
           >
             Sun Care That Loves You Back
           </motion.p>
 
-          <motion.h1
-            className="hero__heading"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.35, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Discover The Magic Of Our SPF!
-          </motion.h1>
+          <h1 className="hero__heading heading-serif">
+            {titleWords.map((word, i) => (
+              <span key={i} className="hero__word-wrap">
+                <motion.span
+                  className="hero__word"
+                  initial={{ y: '100%', rotate: 2 }}
+                  animate={{ y: 0, rotate: 0 }}
+                  transition={{
+                    delay: 1.1 + i * 0.08,
+                    duration: 0.85,
+                    ease: [0.25, 1, 0.5, 1],
+                  }}
+                >
+                  {word}&nbsp;
+                </motion.span>
+              </span>
+            ))}
+          </h1>
 
           <motion.p
             className="hero__subtext"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.5, duration: 0.6 }}
+            transition={{ delay: 1.8, duration: 0.7 }}
           >
-            Your skin deserves love, protection, and a little extra care. That's where{' '}
-            <strong>Sunkey</strong> comes in!
+            Your skin deserves broad-spectrum protection, deep hydration, and a clean weightless finish.
+            Experience the <strong>Sunkey</strong> difference today.
           </motion.p>
 
-          <motion.a
-            href="#"
-            className="hero__cta"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.65, duration: 0.6 }}
-            whileHover={{ scale: 1.05, backgroundColor: '#45d2f1' }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Shop Now ↗
-          </motion.a>
+          <div style={{ display: 'inline-block' }}>
+            <motion.a
+              href="#shop"
+              className="btn-primary"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2, duration: 0.7 }}
+            >
+              Shop Now ↗
+            </motion.a>
+          </div>
 
           {/* Stats row */}
           <motion.div
             className="hero__stats"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.85, duration: 0.6 }}
+            transition={{ delay: 2.2, duration: 0.8 }}
           >
-            {[['10K+', 'Happy Customers'], ['SPF 50+', 'Max Protection'], ['100%', 'Mineral Based']].map(([val, label]) => (
+            {[
+              ['10K+', 'Happy Customers'],
+              ['SPF 50+', 'Max Protection'],
+              ['100%', 'Mineral Based'],
+            ].map(([val, label]) => (
               <div key={label} className="hero__stat">
                 <span className="hero__stat-val">{val}</span>
                 <span className="hero__stat-label">{label}</span>
@@ -191,12 +280,13 @@ export default function Hero() {
         {/* Floating review badge */}
         <motion.div
           className="hero__review-badge"
-          initial={{ opacity: 0, scale: 0.8, x: 20 }}
+          initial={{ opacity: 0, scale: 0.85, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ delay: 1.9, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 2.1, duration: 0.8, ease: 'easeOut' }}
+          whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.12)' }}
         >
           <div className="hero__stars">★★★★★</div>
-          <p className="hero__review-text">"Best SPF I've ever used!"</p>
+          <p className="hero__review-text">"The absolute best mineral SPF I've ever used. Zero white cast!"</p>
           <p className="hero__reviewer">— Priya S.</p>
         </motion.div>
       </div>

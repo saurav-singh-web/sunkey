@@ -1,0 +1,46 @@
+.custom-cursor {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.custom-cursor__text {
+  font-family: var(--font-primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  pointer-events: none;
+  display: block;
+}
+
+.custom-cursor--pointer {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.custom-cursor--view {
+  box-shadow: 0 8px 30px rgba(212, 158, 106, 0.15);
+}
+
+.custom-cursor--drag {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Hide default cursor on desktop when custom cursor is active */
+@media (min-width: 1025px) {
+  body {
+    cursor: none;
+  }
+  
+  a, button, input, select, textarea, [role="button"], [data-cursor] {
+    cursor: none !important;
+  }
+}
