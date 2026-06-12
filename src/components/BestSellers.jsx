@@ -39,18 +39,7 @@ const products = [
     img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80',
     color: '#ffeab2',
   },
-  {
-    id: 4,
-    name: 'Tomato Extract Lip SPF Oil',
-    tag: 'Trending',
-    price: '₹399',
-    originalPrice: '₹499',
-    rating: 4.9,
-    reviews: 620,
-    badge: 'SPF 20',
-    img: 'https://images.unsplash.com/photo-1631390188697-e37cdf8a68f5?w=500&q=80',
-    color: '#f7c5b2',
-  },
+
 ]
 
 function ProductCard({ product, index }) {
