@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import SplitTextReveal from './SplitTextReveal'
 import './WhySunkey.css'
 
 const features = [
@@ -84,15 +85,13 @@ export default function WhySunkey() {
           >
             Why Choose Us
           </motion.p>
-          <motion.h2
-            className="why-sunkey__title heading-serif"
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
-            Sunscreen You Can <br />
-            <span className="why-sunkey__highlight">Actually Trust</span>
-          </motion.h2>
+          <h2 className="why-sunkey__title heading-serif">
+            <SplitTextReveal text="Sunscreen You Can" delay={0.1} />
+            <br />
+            <span className="why-sunkey__highlight">
+              <SplitTextReveal text="Actually Trust" delay={0.5} />
+            </span>
+          </h2>
         </div>
 
         {/* Features Grid */}

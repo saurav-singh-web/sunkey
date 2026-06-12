@@ -2,6 +2,8 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SplitTextReveal from './SplitTextReveal'
+import MagneticButton from './MagneticButton'
 import './Ingredients.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -155,14 +157,11 @@ export default function Ingredients() {
           >
             What's Inside
           </motion.p>
-          <motion.h2
-            className="ingredients__title heading-serif"
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
-            Nature Meets <br />Science
-          </motion.h2>
+          <h2 className="ingredients__title heading-serif">
+            <SplitTextReveal text="Nature Meets" delay={0.1} />
+            <br />
+            <SplitTextReveal text="Science" delay={0.3} />
+          </h2>
           <motion.p
             className="ingredients__desc"
             initial={{ opacity: 0, y: 16 }}
@@ -218,16 +217,11 @@ export default function Ingredients() {
           })}
         </div>
 
-        <motion.a
-          href="#"
-          className="btn-primary ingredients__btn"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-        >
-          View Full Science Report
-        </motion.a>
+        <div style={{ marginTop: '32px' }}>
+          <MagneticButton href="#" className="btn-primary ingredients__btn">
+            View Full Science Report
+          </MagneticButton>
+        </div>
       </div>
     </section>
   )

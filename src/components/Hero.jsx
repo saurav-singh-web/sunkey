@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Particles from "react-tsparticles"
+import { loadFull } from "tsparticles"
+import MagneticButton from './MagneticButton'
 import './Hero.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -39,6 +42,10 @@ export default function Hero() {
   const productImgWrapRef = useRef(null)
   const productImgRef = useRef(null)
   const sunRef = useRef(null)
+
+  const particlesInit = async (main) => {
+    await loadFull(main)
+  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -150,6 +157,28 @@ export default function Hero() {
 
   return (
     <section ref={heroRef} className="hero">
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          fullScreen: { enable: false },
+          fpsLimit: 60,
+          interactivity: {
+            events: { onHover: { enable: true, mode: "bubble" }, resize: true },
+            modes: { bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 } }
+          },
+          particles: {
+            color: { value: "#D49E6A" },
+            move: { enable: true, speed: 0.8, direction: "top", random: true, outModes: "out" },
+            number: { density: { enable: true, area: 800 }, value: 60 },
+            opacity: { value: 0.4, random: true },
+            shape: { type: "circle" },
+            size: { value: { min: 1, max: 3 } }
+          },
+          detectRetina: true,
+        }}
+        className="hero__particles"
+      />
       {/* ── LEFT PANEL ── */}
       <div ref={leftRef} className="hero__panel hero__panel--left">
         <PremiumSun svgRef={sunRef} className="hero__sun" />
@@ -161,14 +190,12 @@ export default function Hero() {
             <strong>That Glows</strong><br />
             with nature's best
           </h2>
-          <motion.a
+          <MagneticButton
             href="#shop"
             className="hero__promo-btn"
-            whileHover={{ scale: 1.04, letterSpacing: '0.2em' }}
-            whileTap={{ scale: 0.97 }}
           >
             Explore Sale →
-          </motion.a>
+          </MagneticButton>
         </div>
 
         {/* Circular product hero image container with magnetic hover */}
@@ -237,15 +264,15 @@ export default function Hero() {
           </motion.p>
 
           <div style={{ display: 'inline-block' }}>
-            <motion.a
-              href="#shop"
-              className="btn-primary"
+            <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 2, duration: 0.7 }}
             >
-              Shop Now ↗
-            </motion.a>
+              <MagneticButton href="#shop" className="btn-primary">
+                Shop Now ↗
+              </MagneticButton>
+            </motion.div>
           </div>
 
           {/* Stats row */}

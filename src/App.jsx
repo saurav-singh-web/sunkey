@@ -7,6 +7,7 @@ import MarqueeStrip from './components/MarqueeStrip'
 import BestSellers from './components/BestSellers'
 import WhySunkey from './components/WhySunkey'
 import Ingredients from './components/Ingredients'
+import Results from './components/Results'
 import Testimonials from './components/Testimonials'
 import InstagramGrid from './components/InstagramGrid'
 import Footer from './components/Footer'
@@ -123,6 +124,7 @@ function App() {
           <BestSellers onAddToCart={handleAddToCart} />
           <WhySunkey />
           <Ingredients />
+          <Results />
           <Testimonials />
           <InstagramGrid />
           <Footer />

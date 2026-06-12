@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import './Footer.css'
 
 const links = {
@@ -8,10 +9,26 @@ const links = {
 }
 
 export default function Footer() {
+  const footerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end end"]
+  })
+  
+  const xTransform = useTransform(scrollYProgress, [0, 1], [200, -500])
+
   return (
-    <footer className="footer">
-      {/* Newsletter signup band */}
-      <div className="footer__newsletter">
+    <footer className="footer" ref={footerRef}>
+      {/* Background Giant Text */}
+      <div className="footer__giant-marquee-wrap">
+        <motion.div style={{ x: xTransform }} className="footer__giant-marquee">
+          SUNKEY SUNKEY SUNKEY SUNKEY SUNKEY SUNKEY
+        </motion.div>
+      </div>
+
+      <div className="footer__content-wrapper">
+        {/* Newsletter signup band */}
+        <div className="footer__newsletter">
         <div className="footer__nl-inner">
           <div className="footer__nl-text">
             <h3 className="footer__nl-title heading-serif">Join the Sunkey Community</h3>
@@ -102,6 +119,7 @@ export default function Footer() {
             <span key={p} className="footer__pay-badge">{p}</span>
           ))}
         </div>
+      </div>
       </div>
     </footer>
   )

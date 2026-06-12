@@ -32,12 +32,20 @@
 }
 
 /* Card Styling */
+.product-card-tilt {
+  display: flex;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
 .product-card {
   display: flex;
   flex-direction: column;
   background: var(--white);
   border: 1px solid var(--border-linen);
   padding: 16px;
+  width: 100%;
+  transform: translateZ(20px);
   transition: box-shadow 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
 

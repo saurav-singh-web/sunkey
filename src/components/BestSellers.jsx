@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import Tilt from 'react-parallax-tilt'
 import './BestSellers.css'
 
 const products = [
@@ -68,70 +69,82 @@ function ProductCard({ product, index, onAddToCart }) {
   }
 
   return (
-    <motion.div
-      ref={ref}
-      className="product-card"
-      variants={cardVariants}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      whileHover="hover"
+    <Tilt
+      glareEnable={true}
+      glareMaxOpacity={0.12}
+      glareColor="#ffffff"
+      glarePosition="all"
+      tiltMaxAngleX={6}
+      tiltMaxAngleY={6}
+      scale={1.01}
+      transitionSpeed={1500}
+      className="product-card-tilt"
     >
-      {/* Image Container with colored background */}
-      <div className="product-card__img-wrap" style={{ '--card-bg': product.color }}>
-        <span className="product-card__tag">{product.tag}</span>
-        
-        {/* Zoom on hover */}
-        <motion.div 
-          className="product-card__img-container"
-          variants={{
-            hover: { scale: 1.05 }
-          }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <img src={product.img} alt={product.name} className="product-card__img" loading="lazy" />
-        </motion.div>
-        
-        <span className="product-card__badge">{product.badge}</span>
-
-        {/* Hover slide-up glassmorphic quick add button */}
-        <motion.div 
-          className="product-card__overlay"
-          variants={{
-            hidden: { opacity: 0, y: 15 },
-            visible: { opacity: 0, y: 15 },
-            hover: { opacity: 1, y: 0 }
-          }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-        >
-          <motion.button
-            className="product-card__quick-add"
-            whileHover={{ scale: 1.03, backgroundColor: 'var(--text-primary)', color: 'var(--white)' }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onAddToCart(product)}
+      <motion.div
+        ref={ref}
+        className="product-card"
+        variants={cardVariants}
+        initial="hidden"
+        animate={inView ? 'visible' : 'hidden'}
+        whileHover="hover"
+      >
+        {/* Image Container with colored background */}
+        <div className="product-card__img-wrap" style={{ '--card-bg': product.color }}>
+          <span className="product-card__tag">{product.tag}</span>
+          
+          {/* Zoom on hover */}
+          <motion.div 
+            className="product-card__img-container"
+            variants={{
+              hover: { scale: 1.05 }
+            }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            Quick Add to Bag
-          </motion.button>
-        </motion.div>
-      </div>
+            <img src={product.img} alt={product.name} className="product-card__img" loading="lazy" />
+          </motion.div>
+          
+          <span className="product-card__badge">{product.badge}</span>
 
-      {/* Info Card */}
-      <div className="product-card__info">
-        <div className="product-card__rating">
-          <span className="product-card__stars">
-            {'★'.repeat(Math.round(product.rating))}
-          </span>
-          <span className="product-card__rating-val">{product.rating}</span>
-          <span className="product-card__reviews">({product.reviews})</span>
+          {/* Hover slide-up glassmorphic quick add button */}
+          <motion.div 
+            className="product-card__overlay"
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: { opacity: 0, y: 15 },
+              hover: { opacity: 1, y: 0 }
+            }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+          >
+            <motion.button
+              className="product-card__quick-add"
+              whileHover={{ scale: 1.03, backgroundColor: 'var(--text-primary)', color: 'var(--white)' }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onAddToCart(product)}
+            >
+              Quick Add to Bag
+            </motion.button>
+          </motion.div>
         </div>
-        <h3 className="product-card__name">{product.name}</h3>
-        <div className="product-card__price-row">
-          <span className="product-card__price">{product.price}</span>
-          {product.originalPrice && (
-            <span className="product-card__original">{product.originalPrice}</span>
-          )}
+
+        {/* Info Card */}
+        <div className="product-card__info">
+          <div className="product-card__rating">
+            <span className="product-card__stars">
+              {'★'.repeat(Math.round(product.rating))}
+            </span>
+            <span className="product-card__rating-val">{product.rating}</span>
+            <span className="product-card__reviews">({product.reviews})</span>
+          </div>
+          <h3 className="product-card__name">{product.name}</h3>
+          <div className="product-card__price-row">
+            <span className="product-card__price">{product.price}</span>
+            {product.originalPrice && (
+              <span className="product-card__original">{product.originalPrice}</span>
+            )}
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Tilt>
   )
 }
 
