@@ -1,0 +1,73 @@
+/* ===========================
+   SUNKEY SKINCARE — GLOBAL CSS
+   =========================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cyan: #b2ecf7;
+  --cyan-dark: #45d2f1;
+  --accent: #b6713e;
+  --yellow: #f5e642;
+  --yellow-dark: #e8d800;
+  --beige: #ecdec1;
+  --dark: #1c1c1c;
+  --mid: #555;
+  --light: #f9f9f9;
+  --white: #ffffff;
+  --border: #e5e5e5;
+
+  --font-primary: 'DM Sans', sans-serif;
+  --font-script: 'Dancing Script', cursive;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--dark);
+  background: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-primary);
+  border: none;
+  background: none;
+}
+
+/* ======= SCROLLBAR ======= */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--light); }
+::-webkit-scrollbar-thumb { background: var(--cyan-dark); border-radius: 3px; }
+
+/* ======= UTILITY ======= */
+.section-tag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}

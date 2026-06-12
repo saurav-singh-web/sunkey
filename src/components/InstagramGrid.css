@@ -1,0 +1,106 @@
+.insta {
+  padding: 100px 60px;
+  background: white;
+  text-align: center;
+}
+
+.insta__header {
+  margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.insta__title {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -0.5px;
+}
+
+.insta__sub {
+  font-size: 0.9rem;
+  color: var(--mid);
+}
+
+/* Grid */
+.insta__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  max-width: 1280px;
+  margin: 0 auto 40px;
+}
+
+.insta__cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.insta__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.insta__cell:hover .insta__img {
+  transform: scale(1.08);
+}
+
+.insta__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  flex-direction: column;
+}
+
+.insta__cell:hover .insta__overlay {
+  opacity: 1;
+}
+
+.insta__likes {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.insta__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Follow button */
+.insta__follow-btn {
+  display: inline-block;
+  padding: 14px 44px;
+  border: 2px solid var(--dark);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--dark);
+  transition: all 0.25s ease;
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .insta__grid { grid-template-columns: repeat(3, 1fr); }
+  .insta { padding: 70px 24px; }
+}
+
+@media (max-width: 500px) {
+  .insta__grid { grid-template-columns: repeat(2, 1fr); }
+}
